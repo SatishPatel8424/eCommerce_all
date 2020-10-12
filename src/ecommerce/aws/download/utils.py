@@ -1,6 +1,7 @@
 import boto
 import re
 import os
+import connection
 
 from django.conf import settings
 from boto.s3.connection import OrdinaryCallingFormat

@@ -3,13 +3,11 @@ from django.views.generic import ListView, UpdateView, CreateView
 from django.shortcuts import render, redirect
 from django.utils.http import is_safe_url
 # CRUD create update retrieve delete
-
 from billing.models import BillingProfile
 from .forms import AddressCheckoutForm, AddressForm
 from .models import Address
 
-
-
+# Address list view
 class AddressListView(LoginRequiredMixin, ListView):
     template_name = 'addresses/list.html'
 
@@ -18,8 +16,7 @@ class AddressListView(LoginRequiredMixin, ListView):
         billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
         return Address.objects.filter(billing_profile=billing_profile)
 
-
-
+# Address update view
 class AddressUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'addresses/update.html'
     form_class = AddressForm
@@ -30,7 +27,7 @@ class AddressUpdateView(LoginRequiredMixin, UpdateView):
         billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)
         return Address.objects.filter(billing_profile=billing_profile)
 
-
+# Address create view
 class AddressCreateView(LoginRequiredMixin, CreateView):
     template_name = 'addresses/update.html'
     form_class = AddressForm
@@ -48,11 +45,7 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
         
     #     return Address.objects.filter(billing_profile=billing_profile)
 
-
-
-
-
-
+# Checkout address create view
 def checkout_address_create_view(request):
     form = AddressCheckoutForm(request.POST or None)
     context = {
@@ -81,8 +74,9 @@ def checkout_address_create_view(request):
     return redirect("cart:checkout") 
 
 
+# checkout address reuse method
 def checkout_address_reuse_view(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         context = {}
         next_ = request.GET.get('next')
         next_post = request.POST.get('next')

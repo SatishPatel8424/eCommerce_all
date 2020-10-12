@@ -15,6 +15,7 @@ stripe.api_key = STRIPE_SECRET_KEY
 
 from .models import BillingProfile, Card
 
+# payment method
 def payment_method_view(request):
     #next_url = 
     # if request.user.is_authenticated():
@@ -32,7 +33,7 @@ def payment_method_view(request):
 
 
 
-
+# payment create method
 def payment_method_createview(request):
     if request.method == "POST" and request.is_ajax():
         billing_profile, billing_profile_created = BillingProfile.objects.new_or_get(request)

@@ -5,7 +5,6 @@ from django.http import HttpResponse
 from django.views.generic import UpdateView, View
 from django.shortcuts import render, redirect
 
-
 from .forms import MarketingPreferenceForm
 from .mixins import CsrfExemptMixin
 from .models import MarketingPreference
@@ -20,7 +19,7 @@ class MarketingPreferenceUpdateView(SuccessMessageMixin, UpdateView):
 
     def dispatch(self, *args, **kwargs):
         user = self.request.user
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return redirect("/login/?next=/settings/email/") # HttpResponse("Not allowed", status=400)
         return super(MarketingPreferenceUpdateView, self).dispatch(*args, **kwargs)
 
@@ -33,9 +32,6 @@ class MarketingPreferenceUpdateView(SuccessMessageMixin, UpdateView):
         user = self.request.user
         obj, created = MarketingPreference.objects.get_or_create(user=user) # get_absolute_url
         return obj
-
-
-
 
 
 
@@ -57,6 +53,8 @@ type: unsubscribe
 data[action]: unsub
 """
 
+
+# web hook view
 class MailchimpWebhookView(CsrfExemptMixin, View): # HTTP GET -- def get() CSRF?????
     # def get(self, request, *args, **kwargs):
     #     return HttpResponse("Thank you", status=200)

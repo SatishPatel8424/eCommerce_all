@@ -1,21 +1,20 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, JsonResponse
 from django.views.generic import View, ListView, DetailView
-from django.shortcuts import render
 
-from billing.models import BillingProfile
 from .models import Order, ProductPurchase
 
-
+# Order list view
 class OrderListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Order.objects.by_request(self.request).not_created()
 
 
+# Order detail view
 class OrderDetailView(LoginRequiredMixin, DetailView):
     
-    def get_object(self):
+    def get_object(self, queryset=None):
         #return Order.objects.get(id=self.kwargs.get('id'))
         #return Order.objects.get(slug=self.kwargs.get('slug'))
         qs = Order.objects.by_request(
@@ -28,13 +27,14 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
         raise Http404
 
 
-
+# Library view
 class LibraryView(LoginRequiredMixin, ListView):
     template_name = 'orders/library.html'
+    model = ProductPurchase
     def get_queryset(self):
         return ProductPurchase.objects.products_by_request(self.request) #.by_request(self.request).digital()
 
-
+# verify owner ship view
 class VerifyOwnership(View):
     def get(self, request, *args, **kwargs):
         if request.is_ajax():

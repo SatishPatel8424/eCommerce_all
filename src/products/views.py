@@ -47,6 +47,7 @@ class UserProductHistoryView(LoginRequiredMixin, ListView):
 class ProductListView(ListView):
     template_name = "products/list.html"
 
+
     # def get_context_data(self, *args, **kwargs):
     #     context = super(ProductListView, self).get_context_data(*args, **kwargs)
     #     print(context)
@@ -105,6 +106,7 @@ from mimetypes import guess_type
 from django.conf import settings
 from orders.models import ProductPurchase
 
+# product download view
 class ProductDownloadView(View):
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug')
@@ -118,7 +120,7 @@ class ProductDownloadView(View):
         can_download = False
         user_ready  = True
         if download_obj.user_required:
-            if not request.user.is_authenticated():
+            if not request.user.is_authenticated:
                 user_ready = False
 
         purchased_products = Product.objects.none()
@@ -154,7 +156,7 @@ class ProductDownloadView(View):
 
 
 
-
+# Product Detail view
 class ProductDetailView(ObjectViewedMixin, DetailView):
     #queryset = Product.objects.all()
     template_name = "products/detail.html"
@@ -178,7 +180,7 @@ class ProductDetailView(ObjectViewedMixin, DetailView):
     #     pk = self.kwargs.get('pk')
     #     return Product.objects.filter(pk=pk)
 
-
+# product detail view method
 def product_detail_view(request, pk=None, *args, **kwargs):
     # instance = Product.objects.get(pk=pk, featured=True) #id
     # instance = get_object_or_404(Product, pk=pk, featured=True)

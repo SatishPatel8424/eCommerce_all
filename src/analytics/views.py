@@ -5,12 +5,10 @@ from django.db.models import Count, Sum, Avg
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView, View
 from django.shortcuts import render
-
 from django.utils import  timezone
-
-
 from orders.models import Order
 
+# Sales ajax view
 class SalesAjaxView(View):
     def get(self, request, *args, **kwargs):
         data = {}
@@ -50,8 +48,7 @@ class SalesAjaxView(View):
                     current -= 1
         return JsonResponse(data)
 
-
-
+# sales view
 class SalesView(LoginRequiredMixin, TemplateView):
     template_name = 'analytics/sales.html'
 
@@ -60,7 +57,6 @@ class SalesView(LoginRequiredMixin, TemplateView):
         if not user.is_staff:
             return render(self.request, "400.html", {})
         return super(SalesView, self).dispatch(*args, **kwargs)
-
 
     def get_context_data(self, *args, **kwargs):
         context = super(SalesView, self).get_context_data(*args, **kwargs)

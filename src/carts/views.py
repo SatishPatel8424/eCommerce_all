@@ -20,8 +20,7 @@ STRIPE_SECRET_KEY = getattr(settings, "STRIPE_SECRET_KEY", "sk_test_cu1lQmcg1OLf
 STRIPE_PUB_KEY =  getattr(settings, "STRIPE_PUB_KEY", 'pk_test_PrV61avxnHaWIYZEeiYTTVMZ')
 stripe.api_key = STRIPE_SECRET_KEY
 
-
-
+# Cart detail api method
 def cart_detail_api_view(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     products = [{
@@ -34,11 +33,12 @@ def cart_detail_api_view(request):
     cart_data  = {"products": products, "subtotal": cart_obj.subtotal, "total": cart_obj.total}
     return JsonResponse(cart_data)
 
+# Cart home method
 def cart_home(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     return render(request, "carts/home.html", {"cart": cart_obj})
 
-
+# cart update method
 def cart_update(request):
     product_id = request.POST.get('product_id')
     
@@ -69,7 +69,7 @@ def cart_update(request):
     return redirect("cart:home")
 
 
-
+# Checkout home method
 def checkout_home(request):
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
@@ -90,7 +90,7 @@ def checkout_home(request):
     address_qs = None
     has_card = False
     if billing_profile is not None:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             address_qs = Address.objects.filter(billing_profile=billing_profile)
         order_obj, order_obj_created = Order.objects.new_or_get(billing_profile, cart_obj)
         if shipping_address_id:
